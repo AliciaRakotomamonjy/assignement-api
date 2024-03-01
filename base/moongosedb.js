@@ -6,7 +6,7 @@ const options = {
   useUnifiedTopology: true,
 };
 
-mongoose.connect(process.env.Moongo_url, options)
+mongoose.connect(process.env.Moongodb_url, options)
   .then(() => {
     console.log("Connecté à la base MongoDB assignments dans le cloud !");
   },
