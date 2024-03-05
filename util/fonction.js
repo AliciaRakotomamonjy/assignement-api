@@ -1,17 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-function sendResult(res, data = null) {
-    res.status(200).json({
-        data
-    });
-}
-
-function sendError(res, error) {
-    console.log(error);
-    res.status(400).json(error);
-}
-
 function GetNamePhotoAndUploadPhoto(req, res) {
     var file = req.files[0];
     if (!file) {
@@ -32,7 +21,5 @@ function GetNamePhotoAndUploadPhoto(req, res) {
 }
 
 module.exports = {
-    sendResult,
-    sendError,
     GetNamePhotoAndUploadPhoto,
 }
