@@ -23,8 +23,8 @@ const prefix = '/api';
 app.use(prefix+"/",authRoute)
 app.use(prefix+"/auth",authRoute)
 app.use(verifyToken);
-app.use(prefix+"/utilisateur",utilisateurRoute)
 app.use(prefix+"/assignment",assignmenthRoute)
+app.use(prefix+"/utilisateur",utilisateurRoute)
 
 
 module.exports = app;
