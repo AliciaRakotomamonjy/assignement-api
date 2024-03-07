@@ -35,6 +35,9 @@ const Login = async (req, res) => {
         const token = jwt.sign({
             email: existUtilisateur.email,
             id: existUtilisateur._id,
+            nom: existUtilisateur.nom,
+            prenom: existUtilisateur.prenom,
+            photo:existUtilisateur.photo,
             role: existUtilisateur.role,
         }, SECRET_KEY, {
             expiresIn: process.env.EXPIRATION_TOKEN
@@ -64,7 +67,7 @@ const Inscription = async (req, res) => {
         role,
         libelle,
     } = req.body;
-    console.log("body les "+req.body);
+    console.log("body les " + req.body);
     const hasUppercase = /[A-Z]/.test(motdepasse);
     const hasLowercase = /[a-z]/.test(motdepasse);
     const hasNumber = /[0-9]/.test(motdepasse);
@@ -107,6 +110,9 @@ const Inscription = async (req, res) => {
             const token = jwt.sign({
                 email: existUtilisateur.email,
                 id: existUtilisateur._id,
+                nom: existUtilisateur.nom,
+                prenom: existUtilisateur.prenom,
+                photo:existUtilisateur.photo,
                 role: existUtilisateur.role,
             }, SECRET_KEY, {
                 expiresIn: process.env.EXPIRATION_TOKEN
@@ -116,13 +122,13 @@ const Inscription = async (req, res) => {
                     libelle: libelle,
                     professeur: existUtilisateur._id
                 };
-                 matiere(mat).save();
+                matiere(mat).save();
             }
             res.status(200).json({
                 nom: existUtilisateur.nom,
                 prenom: existUtilisateur.prenom,
                 token: token,
-                message:"inscription fini"
+                message: "inscription fini"
             })
         });
     } catch (error) {
