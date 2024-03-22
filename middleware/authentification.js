@@ -13,7 +13,8 @@ function verifyToken(req, res, next) {
       req.utilisateur = {
         id: decoded.id,
         email: decoded.email,
-        role: decoded.role
+        role: decoded.role,
+        matiereid: decoded.matiere_id
       };
       next();
     });

@@ -17,6 +17,7 @@ const { verifyToken }= require('./middleware/authentification');
 const utilisateurRoute =require("./routes/utilisateurRoute");
 const authRoute =require("./routes/authRoute");
 const assignmenthRoute =require("./routes/assignmentRoute");
+const matiereRoute =require("./routes/matiereRoute");
 
 require("./base/moongosedb");
 const prefix = '/api';
@@ -24,6 +25,7 @@ app.use(prefix+"/",authRoute)
 app.use(prefix+"/auth",authRoute)
 app.use(verifyToken);
 app.use(prefix+"/assignment",assignmenthRoute)
+app.use(prefix+"/matiere",matiereRoute)
 app.use(prefix+"/utilisateur",utilisateurRoute)
 
 

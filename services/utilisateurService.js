@@ -32,16 +32,22 @@ const Login = async (req, res) => {
                 message: "Erreur de connexion. Veuillez vérifier votre adresse e-mail ou votre mot de passe."
             })
         }
+        const m = await matiere.findOne({
+            professeur: existUtilisateur._id
+        })
         const token = jwt.sign({
             email: existUtilisateur.email,
             id: existUtilisateur._id,
             nom: existUtilisateur.nom,
             prenom: existUtilisateur.prenom,
-            photo:existUtilisateur.photo,
+            photo: existUtilisateur.photo,
             role: existUtilisateur.role,
+            matiere_id: m._id,
+            matiere_libelle: m.libelle,
         }, SECRET_KEY, {
             expiresIn: process.env.EXPIRATION_TOKEN
         });
+        console.log("token",token)
         res.status(200).json({
             nom: existUtilisateur.nom,
             prenom: existUtilisateur.prenom,
@@ -100,37 +106,41 @@ const Inscription = async (req, res) => {
             });
         }
         const hasshedPassord = await bcrypt.hash(motdepasse, 10);
-        new utilisateur({
+        const utilisateur_ = await new utilisateur({
             nom: nom,
             prenom: prenom,
             email: email,
             motdepasse: hasshedPassord,
             role: role
-        }).save().then(function (existUtilisateur) {
-            const token = jwt.sign({
-                email: existUtilisateur.email,
-                id: existUtilisateur._id,
-                nom: existUtilisateur.nom,
-                prenom: existUtilisateur.prenom,
-                photo:existUtilisateur.photo,
-                role: existUtilisateur.role,
-            }, SECRET_KEY, {
-                expiresIn: process.env.EXPIRATION_TOKEN
-            });
-            if (role == "prof") {
-                let mat = {
-                    libelle: libelle,
-                    professeur: existUtilisateur._id
-                };
-                matiere(mat).save();
-            }
-            res.status(200).json({
-                nom: existUtilisateur.nom,
-                prenom: existUtilisateur.prenom,
-                token: token,
-                message: "inscription fini"
-            })
+        }).save();
+
+        let nv_matier = null
+        if (role == "prof") {
+            let mat = {
+                libelle: libelle,
+                professeur: utilisateur_._id
+            };
+            nv_matier = await matiere(mat).save();
+        }
+        const token = jwt.sign({
+            email: utilisateur_.email,
+            id: utilisateur_._id,
+            nom: utilisateur_.nom,
+            prenom: utilisateur_.prenom,
+            photo: utilisateur_.photo,
+            role: utilisateur_.role,
+            matiere_id: nv_matier._id,
+            matiere_libelle: nv_matier.libelle
+        }, SECRET_KEY, {
+            expiresIn: process.env.EXPIRATION_TOKEN
         });
+        console.log("token",token)
+        res.status(200).json({
+            nom: utilisateur_.nom,
+            prenom: utilisateur_.prenom,
+            token: token,
+            message: "inscription fini"
+        })
     } catch (error) {
         console.log(error);
         res.status(500).json({
