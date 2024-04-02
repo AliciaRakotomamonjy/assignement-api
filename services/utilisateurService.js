@@ -35,18 +35,33 @@ const Login = async (req, res) => {
         const m = await matiere.findOne({
             professeur: existUtilisateur._id
         })
-        const token = jwt.sign({
-            email: existUtilisateur.email,
-            id: existUtilisateur._id,
-            nom: existUtilisateur.nom,
-            prenom: existUtilisateur.prenom,
-            photo: existUtilisateur.photo,
-            role: existUtilisateur.role,
-            matiere_id: m._id,
-            matiere_libelle: m.libelle,
-        }, SECRET_KEY, {
-            expiresIn: process.env.EXPIRATION_TOKEN
-        });
+        var token=null;
+        if(m==null){
+            token = jwt.sign({
+                email: existUtilisateur.email,
+                id: existUtilisateur._id,
+                nom: existUtilisateur.nom,
+                prenom: existUtilisateur.prenom,
+                photo: existUtilisateur.photo,
+                role: existUtilisateur.role,
+            }, SECRET_KEY, {
+                expiresIn: process.env.EXPIRATION_TOKEN
+            });
+        }
+        else{
+            token = jwt.sign({
+                email: existUtilisateur.email,
+                id: existUtilisateur._id,
+                nom: existUtilisateur.nom,
+                prenom: existUtilisateur.prenom,
+                photo: existUtilisateur.photo,
+                role: existUtilisateur.role,
+                matiere_id: m._id,
+                matiere_libelle: m.libelle,
+            }, SECRET_KEY, {
+                expiresIn: process.env.EXPIRATION_TOKEN
+            });
+        } 
         console.log("token",token)
         res.status(200).json({
             nom: existUtilisateur.nom,
@@ -113,7 +128,7 @@ const Inscription = async (req, res) => {
             motdepasse: hasshedPassord,
             role: role
         }).save();
-
+        var token=null;
         let nv_matier = null
         if (role == "prof") {
             let mat = {
@@ -121,19 +136,33 @@ const Inscription = async (req, res) => {
                 professeur: utilisateur_._id
             };
             nv_matier = await matiere(mat).save();
+            token = jwt.sign({
+                email: utilisateur_.email,
+                id: utilisateur_._id,
+                nom: utilisateur_.nom,
+                prenom: utilisateur_.prenom,
+                photo: utilisateur_.photo,
+                role: utilisateur_.role,
+                matiere_id: nv_matier._id,
+                matiere_libelle: nv_matier.libelle
+            }, SECRET_KEY, {
+                expiresIn: process.env.EXPIRATION_TOKEN
+            });
         }
-        const token = jwt.sign({
-            email: utilisateur_.email,
-            id: utilisateur_._id,
-            nom: utilisateur_.nom,
-            prenom: utilisateur_.prenom,
-            photo: utilisateur_.photo,
-            role: utilisateur_.role,
-            matiere_id: nv_matier._id,
-            matiere_libelle: nv_matier.libelle
-        }, SECRET_KEY, {
-            expiresIn: process.env.EXPIRATION_TOKEN
-        });
+        else{
+            token = jwt.sign({
+                email: utilisateur_.email,
+                id: utilisateur_._id,
+                nom: utilisateur_.nom,
+                prenom: utilisateur_.prenom,
+                photo: utilisateur_.photo,
+                role: utilisateur_.role,
+            }, SECRET_KEY, {
+                expiresIn: process.env.EXPIRATION_TOKEN
+            });
+        }
+        
+
         console.log("token",token)
         res.status(200).json({
             nom: utilisateur_.nom,

@@ -14,8 +14,10 @@ function verifyToken(req, res, next) {
         id: decoded.id,
         email: decoded.email,
         role: decoded.role,
-        matiereid: decoded.matiere_id
       };
+      if (decoded.role == "prof") {
+        req.utilisateur.matiereid=decoded.matiere_id;
+      }
       next();
     });
   } catch {
