@@ -19,8 +19,12 @@ const authRoute =require("./routes/authRoute");
 const assignmenthRoute =require("./routes/assignmentRoute");
 const matiereRoute =require("./routes/matiereRoute");
 
+const staticOptions = {
+    maxAge: '1y',
+  };
 require("./base/moongosedb");
 const prefix = '/api';
+app.use(prefix+"/fichier_assignment_eleve", express.static("fichier_assignment_eleve", staticOptions));
 app.use(prefix+"/",authRoute)
 app.use(prefix+"/auth",authRoute)
 app.use(verifyToken);

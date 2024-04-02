@@ -6,6 +6,10 @@ const {
     isEmail
 } = require('validator');
 const matiere = require("../models/matiere");
+const {
+    GetNameFichierAndUploadFichier
+} = require("../util/fonction");
+const assignmentEleve = require("../models/assignmentEleve");
 
 const Login = async (req, res) => {
     const {
@@ -35,8 +39,8 @@ const Login = async (req, res) => {
         const m = await matiere.findOne({
             professeur: existUtilisateur._id
         })
-        var token=null;
-        if(m==null){
+        var token = null;
+        if (m == null) {
             token = jwt.sign({
                 email: existUtilisateur.email,
                 id: existUtilisateur._id,
@@ -47,8 +51,7 @@ const Login = async (req, res) => {
             }, SECRET_KEY, {
                 expiresIn: process.env.EXPIRATION_TOKEN
             });
-        }
-        else{
+        } else {
             token = jwt.sign({
                 email: existUtilisateur.email,
                 id: existUtilisateur._id,
@@ -61,8 +64,8 @@ const Login = async (req, res) => {
             }, SECRET_KEY, {
                 expiresIn: process.env.EXPIRATION_TOKEN
             });
-        } 
-        console.log("token",token)
+        }
+        console.log("token", token)
         res.status(200).json({
             nom: existUtilisateur.nom,
             prenom: existUtilisateur.prenom,
@@ -128,7 +131,7 @@ const Inscription = async (req, res) => {
             motdepasse: hasshedPassord,
             role: role
         }).save();
-        var token=null;
+        var token = null;
         let nv_matier = null
         if (role == "prof") {
             let mat = {
@@ -148,8 +151,7 @@ const Inscription = async (req, res) => {
             }, SECRET_KEY, {
                 expiresIn: process.env.EXPIRATION_TOKEN
             });
-        }
-        else{
+        } else {
             token = jwt.sign({
                 email: utilisateur_.email,
                 id: utilisateur_._id,
@@ -161,9 +163,9 @@ const Inscription = async (req, res) => {
                 expiresIn: process.env.EXPIRATION_TOKEN
             });
         }
-        
 
-        console.log("token",token)
+
+        console.log("token", token)
         res.status(200).json({
             nom: utilisateur_.nom,
             prenom: utilisateur_.prenom,
@@ -177,8 +179,29 @@ const Inscription = async (req, res) => {
         });
     }
 }
-
+const FaireDevoir = async (req, res) => {
+    try {
+        var fichierName = GetNameFichierAndUploadFichier(req, 'fichier');
+        const AssignEleve = {
+            description: req.body.description,
+            eleve: req.utilisateur.id,
+            assignment:req.body.assignmentId,
+            fichier:fichierName,
+            dateRendu:new Date()
+        }
+        await assignmentEleve(AssignEleve).save();
+        return res.status(201).json({
+            message: "Votre assignment est fait!!"
+        });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            message: "Erreur dans votre code"
+        });
+    }
+}
 module.exports = {
     Login,
-    Inscription
+    Inscription,
+    FaireDevoir
 }
