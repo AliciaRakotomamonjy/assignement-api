@@ -201,20 +201,58 @@ const GetAssignmentByIdWithDetailsFiltered = async (req, res) => {
 const AjouterNoteAssignmentEleve = (req, res) => {
     let note = req.body.note
     if(!isNumber(note)){
-        res.status(400).json({message:"Veuillez insérer un nombre pour la note"})
+        return res.status(400).json({message:"Veuillez insérer un nombre pour la note"})
     }else{
         note = parseInt(note)
         if(note<0){
-            res.status(400).json({message:"Veuillez insérer un nombre positif"})
+            return res.status(400).json({message:"Veuillez insérer un nombre positif"})
         }
     }
-    assignment.findByIdAndUpdate(req.body._id, {...req.body, rendu: true}, {new: true}).then(result=>{
+    assignmentEleve.findByIdAndUpdate(req.body._id, {...req.body, rendu: true}, {new: true}).populate({
+        path: 'eleve',
+        model: 'utilisateurs',
+        select: '_id nom prenom email',
+        
+    }).populate({
+        path: 'assignment',
+        select: '-assignmenteleves',
+        populate: {
+            path: 'matiere'
+        }
+    }).then(result=>{
         if(result){
-            res.status(201).json({message:"Modification effectuée avec succès"})
+            return res.status(201).json({message:"Modification effectuée avec succès",result})
         }else{
-            res.status(404).json({message:"Assignment introuvable."})
+            return res.status(404).json({message:"Assignment introuvable."})
         }
     });
+}
+
+const GetAssignmentEleveById = async (req, res) => {
+    let assignmentEleveId = req.params.id;
+    console.log(assignmentEleveId)
+    const result = await assignmentEleve.findById(assignmentEleveId).populate({
+        path: 'eleve',
+        model: 'utilisateurs',
+        select: '_id nom prenom email',
+        
+    }).populate({
+        path: 'assignment',
+        select: '-assignmenteleves',
+        populate: {
+            path: 'matiere'
+        }
+    })
+    
+    if (result) {
+        return res.status(200).json(result)
+    } else {
+        return res.status(400).json({
+            message: "assignment eleve introuvable."
+        })
+    }
+    
+
 }
 
 
@@ -228,5 +266,6 @@ module.exports = {
     DeleteAssignment,
     GetAssignmentByIdWithDetails,
     GetAssignmentByIdWithDetailsFiltered,
-    AjouterNoteAssignmentEleve
+    AjouterNoteAssignmentEleve,
+    GetAssignmentEleveById
 }

@@ -29,8 +29,9 @@ function GetNameFichierAndUploadFichier(req,contenu) {
 }
 
 const isNumber = (str) => {
-    return /^\d+$/.test(str);
-  }
+    return /^-?\d*\.?\d+$/.test(str);
+}
+
 
 module.exports = {
     GetNameFichierAndUploadFichier,
