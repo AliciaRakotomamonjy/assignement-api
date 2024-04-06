@@ -9,6 +9,10 @@ router.route("/ajouterassignment").post(assignmentService.AjouterAssignmnet);
 router.route("/getassignmentbyid/:id").get(assignmentService.GetAssignmentById);
 router.route("/editeassignment").put(assignmentService.EditeAssignment);
 router.route("/deleteassignment/:id").delete(assignmentService.DeleteAssignment);
+router.route("/getassignmentbyidwithdetails/:id").get(assignmentService.GetAssignmentByIdWithDetails);
+router.route("/getassignmentbyidwithdetailsfiltered/:id").get(assignmentService.GetAssignmentByIdWithDetailsFiltered);
+router.route("/ajouternoteassignmenteleve").get(assignmentService.AjouterNoteAssignmentEleve);
+
 // router.route("/inscription").post(utilisateurService.Inscription);
 
 

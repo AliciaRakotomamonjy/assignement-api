@@ -28,6 +28,11 @@ function GetNameFichierAndUploadFichier(req,contenu) {
     return nomPhoto;
 }
 
+const isNumber = (str) => {
+    return /^\d+$/.test(str);
+  }
+
 module.exports = {
     GetNameFichierAndUploadFichier,
+    isNumber
 }

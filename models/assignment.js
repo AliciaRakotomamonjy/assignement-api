@@ -16,6 +16,7 @@ let AssignmentSchema = Schema({
         type: Date,
         required: true
     },
+    assignmenteleves: [{ type: mongoose.Schema.Types.ObjectId, ref: 'assignmenteleves' }]
 });
 
 AssignmentSchema.plugin(mongoosePaginate);

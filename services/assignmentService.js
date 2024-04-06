@@ -2,7 +2,9 @@ const {
     ObjectId
 } = require("mongodb");
 const assignment = require("../models/assignment")
-const matiere = require("../models/matiere")
+const assignmentEleve = require("../models/assignmentEleve")
+const matiere = require("../models/matiere");
+const { isNumber } = require("../util/fonction");
 
 const GetAllAssignment = async (req, res) => {
     try {
@@ -140,10 +142,91 @@ const AjouterAssignmnet = async (req, res) => {
     })
 
 }
+
+const GetAssignmentByIdWithDetails = (req, res) => {
+    let assignmentId = req.params.id;
+    assignment.findById(assignmentId)
+    .populate({
+        path: 'assignmenteleves',
+        select: '-assignment',
+        populate: {
+            path: 'eleve',
+            model: 'utilisateurs',
+            select: '_id nom prenom email' 
+        }
+    })
+    .populate('matiere')
+    .then(result => {
+        if (result) {
+            return res.status(200).json(result)
+        } else {
+            return res.status(400).json({
+                message: "assignment introuvable."
+            })
+        }
+    })
+}
+
+const GetAssignmentByIdWithDetailsFiltered = async (req, res) => {
+    let assignmentId = req.params.id;
+    
+    try {
+        const assignmentToFind = await assignment.findById(assignmentId).populate("matiere").exec();
+        if (!assignmentToFind) {
+            return res.status(404).json({ message: 'Assignment introuvable.' });
+        }
+
+        const assignmentElevesRenduFalse = await assignmentEleve.find({ assignment: assignmentId, rendu: false }).populate('eleve', 'nom prenom _id').exec();
+        const assignmentElevesRenduTrue = await assignmentEleve.find({ assignment: assignmentId, rendu: true }).populate('eleve', 'nom prenom _id').exec();
+
+        return res.status(200).json({
+            assignment: {
+                _id: assignmentToFind._id,
+                description: assignmentToFind.description,
+                matiere: assignmentToFind.matiere,
+                datePublication: assignmentToFind.datePublication,
+                dateLimite: assignmentToFind.dateLimite
+            },
+            assignmentEleves: {
+                rendu_false: assignmentElevesRenduFalse,
+                rendu_true: assignmentElevesRenduTrue
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Erreur lors de la récupération des données.' });
+    }
+}
+
+const AjouterNoteAssignmentEleve = (req, res) => {
+    let note = req.body.note
+    if(!isNumber(note)){
+        res.status(400).json({message:"Veuillez insérer un nombre pour la note"})
+    }else{
+        note = parseInt(note)
+        if(note<0){
+            res.status(400).json({message:"Veuillez insérer un nombre positif"})
+        }
+    }
+    assignment.findByIdAndUpdate(req.body._id, {...req.body, rendu: true}, {new: true}).then(result=>{
+        if(result){
+            res.status(201).json({message:"Modification effectuée avec succès"})
+        }else{
+            res.status(404).json({message:"Assignment introuvable."})
+        }
+    });
+}
+
+
+
+
 module.exports = {
     GetAllAssignment,
     AjouterAssignmnet,
     EditeAssignment,
     GetAssignmentById,
-    DeleteAssignment
+    DeleteAssignment,
+    GetAssignmentByIdWithDetails,
+    GetAssignmentByIdWithDetailsFiltered,
+    AjouterNoteAssignmentEleve
 }
