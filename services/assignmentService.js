@@ -173,26 +173,38 @@ const GetAssignmentByIdWithDetailsFiltered = async (req, res) => {
     let assignmentId = req.params.id;
 
     try {
-        const assignmentToFind = await assignment.findById(assignmentId).populate("matiere").exec();
-        if (!assignmentToFind) {
-            return res.status(404).json({ message: 'Assignment introuvable.' });
-        }
 
-        const assignmentElevesRenduFalse = await assignmentEleve.find({ assignment: assignmentId, rendu: false }).populate('eleve', 'nom prenom _id').exec();
-        const assignmentElevesRenduTrue = await assignmentEleve.find({ assignment: assignmentId, rendu: true }).populate('eleve', 'nom prenom _id').exec();
+        const assignmentElevesRenduFalse = await assignmentEleve.find({ assignment: assignmentId, rendu: false })
+        .populate({
+            path: 'eleve',
+            model: 'utilisateurs',
+            select: '_id nom prenom email',
+            
+        }).populate({
+            path: 'assignment',
+            select: '-assignmenteleves',
+            populate: {
+                path: 'matiere'
+            }
+        }).exec();
+        
+        const assignmentElevesRenduTrue = await assignmentEleve.find({ assignment: assignmentId, rendu: true })
+        .populate({
+            path: 'eleve',
+            model: 'utilisateurs',
+            select: '_id nom prenom email',
+            
+        }).populate({
+            path: 'assignment',
+            select: '-assignmenteleves',
+            populate: {
+                path: 'matiere'
+            }
+        }).exec();
 
         return res.status(200).json({
-            assignment: {
-                _id: assignmentToFind._id,
-                description: assignmentToFind.description,
-                matiere: assignmentToFind.matiere,
-                datePublication: assignmentToFind.datePublication,
-                dateLimite: assignmentToFind.dateLimite
-            },
-            assignmentEleves: {
-                rendu_false: assignmentElevesRenduFalse,
-                rendu_true: assignmentElevesRenduTrue
-            }
+            rendu_false: assignmentElevesRenduFalse,
+            rendu_true: assignmentElevesRenduTrue
         });
     } catch (err) {
         console.error(err);
