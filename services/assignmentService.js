@@ -257,7 +257,10 @@ const GetAssignmentEleveById = async (req, res) => {
         path: 'assignment',
         select: '-assignmenteleves',
         populate: {
-            path: 'matiere'
+            path: 'matiere',
+            populate: {
+                path: 'professeur'
+            }
         }
     })
 

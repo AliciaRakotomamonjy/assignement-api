@@ -69,6 +69,14 @@ const getAllAssignmentUser = async (asignFiltre) => {
         });
 
         aggregateQuery.unwind('$matiere');
+
+        aggregateQuery.lookup({
+            from: 'utilisateurs',
+            localField: 'matiere.professeur',
+            foreignField: '_id',
+            as: 'professeur'
+        });
+        aggregateQuery.unwind('$professeur');
         let options = {
             page: parseInt(asignFiltre.page) || 1,
             limit: parseInt(asignFiltre.limit) || 10
@@ -81,6 +89,30 @@ const getAllAssignmentUser = async (asignFiltre) => {
         if (Object.keys(filters).length > 0) {
             aggregateQuery.match(filters);
         }
+
+        aggregateQuery.project({
+            description: 1,
+            assignment: {
+                _id: 1,
+                description: 1,
+                matiere: {
+                    _id: "$matiere._id",
+                    libelle: "$matiere.libelle",
+                    professeur: {
+                        _id : "$professeur._id",
+                        nom : "$professeur.nom",
+                        prenom : "$professeur.prenom",
+                    }
+                },
+                datePublication: 1,
+                dateLimite: 1,
+            },
+            fichier: 1,
+            rendu: 1,
+            dateRendu: 1,
+            note: 1,
+            remarque: 1,
+        })
 
 
         let data = await assignmentEleve.aggregatePaginate(aggregateQuery, options);
