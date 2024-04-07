@@ -5,6 +5,8 @@ const assignment = require("../models/assignment")
 const assignmentEleve = require("../models/assignmentEleve")
 const matiere = require("../models/matiere");
 const { isNumber } = require("../util/fonction");
+const services = require("./daoService");
+
 
 const GetAllAssignment = async (req, res) => {
     try {
@@ -66,28 +68,28 @@ const EditeAssignment = async (req, res) => {
     console.log(req.utilisateur.matiereid);
     console.log(req.body.matiere);
     if (req.utilisateur.matiereid != req.body.matiere) {
-        return res.status(400).json({message:"Vous ne pouvez pas éditer cet assignment."})
+        return res.status(400).json({ message: "Vous ne pouvez pas éditer cet assignment." })
     }
-    assignment.findByIdAndUpdate(req.body._id, req.body, {new: true}).then(result=>{
-        if(result){
-            res.status(201).json({message:"Modification effectuée avec succès"})
+    assignment.findByIdAndUpdate(req.body._id, req.body, { new: true }).then(result => {
+        if (result) {
+            res.status(201).json({ message: "Modification effectuée avec succès" })
         }
-        else{
-            res.status(404).json({message:"Assignment introuvable."})
+        else {
+            res.status(404).json({ message: "Assignment introuvable." })
         }
     });
 
 }
 
-const DeleteAssignment= async(req, res) =>{
+const DeleteAssignment = async (req, res) => {
     console.log("id assignment" + req.params.id);
 
-    assignment.deleteOne({_id: req.params.id}).then(result=>{
-        if(result){
-            res.status(201).json({message:"Suppression effectuée avec succès"})
+    assignment.deleteOne({ _id: req.params.id }).then(result => {
+        if (result) {
+            res.status(201).json({ message: "Suppression effectuée avec succès" })
         }
-        else{
-            res.status(404).json({message:"Assignment introuvable."})
+        else {
+            res.status(404).json({ message: "Assignment introuvable." })
         }
     });
 }
@@ -146,30 +148,30 @@ const AjouterAssignmnet = async (req, res) => {
 const GetAssignmentByIdWithDetails = (req, res) => {
     let assignmentId = req.params.id;
     assignment.findById(assignmentId)
-    .populate({
-        path: 'assignmenteleves',
-        select: '-assignment',
-        populate: {
-            path: 'eleve',
-            model: 'utilisateurs',
-            select: '_id nom prenom email' 
-        }
-    })
-    .populate('matiere')
-    .then(result => {
-        if (result) {
-            return res.status(200).json(result)
-        } else {
-            return res.status(400).json({
-                message: "assignment introuvable."
-            })
-        }
-    })
+        .populate({
+            path: 'assignmenteleves',
+            select: '-assignment',
+            populate: {
+                path: 'eleve',
+                model: 'utilisateurs',
+                select: '_id nom prenom email'
+            }
+        })
+        .populate('matiere')
+        .then(result => {
+            if (result) {
+                return res.status(200).json(result)
+            } else {
+                return res.status(400).json({
+                    message: "assignment introuvable."
+                })
+            }
+        })
 }
 
 const GetAssignmentByIdWithDetailsFiltered = async (req, res) => {
     let assignmentId = req.params.id;
-    
+
     try {
         const assignmentToFind = await assignment.findById(assignmentId).populate("matiere").exec();
         if (!assignmentToFind) {
@@ -200,30 +202,30 @@ const GetAssignmentByIdWithDetailsFiltered = async (req, res) => {
 
 const AjouterNoteAssignmentEleve = (req, res) => {
     let note = req.body.note
-    if(!isNumber(note)){
-        return res.status(400).json({message:"Veuillez insérer un nombre pour la note"})
-    }else{
+    if (!isNumber(note)) {
+        return res.status(400).json({ message: "Veuillez insérer un nombre pour la note" })
+    } else {
         note = parseInt(note)
-        if(note<0){
-            return res.status(400).json({message:"Veuillez insérer un nombre positif"})
+        if (note < 0) {
+            return res.status(400).json({ message: "Veuillez insérer un nombre positif" })
         }
     }
-    assignmentEleve.findByIdAndUpdate(req.body._id, {...req.body, rendu: true}, {new: true}).populate({
+    assignmentEleve.findByIdAndUpdate(req.body._id, { ...req.body, rendu: true }, { new: true }).populate({
         path: 'eleve',
         model: 'utilisateurs',
         select: '_id nom prenom email',
-        
+
     }).populate({
         path: 'assignment',
         select: '-assignmenteleves',
         populate: {
             path: 'matiere'
         }
-    }).then(result=>{
-        if(result){
-            return res.status(201).json({message:"Modification effectuée avec succès",result})
-        }else{
-            return res.status(404).json({message:"Assignment introuvable."})
+    }).then(result => {
+        if (result) {
+            return res.status(201).json({ message: "Modification effectuée avec succès", result })
+        } else {
+            return res.status(404).json({ message: "Assignment introuvable." })
         }
     });
 }
@@ -235,7 +237,7 @@ const GetAssignmentEleveById = async (req, res) => {
         path: 'eleve',
         model: 'utilisateurs',
         select: '_id nom prenom email',
-        
+
     }).populate({
         path: 'assignment',
         select: '-assignmenteleves',
@@ -243,7 +245,7 @@ const GetAssignmentEleveById = async (req, res) => {
             path: 'matiere'
         }
     })
-    
+
     if (result) {
         return res.status(200).json(result)
     } else {
@@ -251,8 +253,29 @@ const GetAssignmentEleveById = async (req, res) => {
             message: "assignment eleve introuvable."
         })
     }
-    
 
+
+}
+
+
+const getUserAssignement = async (req, res) => {
+    try {
+        let { dateDebut, dateFin, idMatiere, page, limit } = req.query;
+        let iduser = req.utilisateur;
+        let filtre = {
+            dateDebut,
+            dateFin,
+            matiere: idMatiere,
+            ideleve: iduser,
+            page,
+            limit
+        }
+        let result = await services.getAllAssignmentUser(filtre);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log("🚀 ~ testAPI ~ error:", error)
+        return res.status(500).json(error);
+    }
 }
 
 
@@ -267,5 +290,6 @@ module.exports = {
     GetAssignmentByIdWithDetails,
     GetAssignmentByIdWithDetailsFiltered,
     AjouterNoteAssignmentEleve,
-    GetAssignmentEleveById
+    GetAssignmentEleveById,
+    getUserAssignement
 }

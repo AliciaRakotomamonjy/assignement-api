@@ -13,24 +13,26 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 app.use(bodyParser.json());
-const { verifyToken }= require('./middleware/authentification');
-const utilisateurRoute =require("./routes/utilisateurRoute");
-const authRoute =require("./routes/authRoute");
-const assignmenthRoute =require("./routes/assignmentRoute");
-const matiereRoute =require("./routes/matiereRoute");
+const { verifyToken } = require('./middleware/authentification');
+const utilisateurRoute = require("./routes/utilisateurRoute");
+const authRoute = require("./routes/authRoute");
+const assignmenthRoute = require("./routes/assignmentRoute");
+const matiereRoute = require("./routes/matiereRoute");
+const testRoute = require("./routes/testRoute");
 
 const staticOptions = {
-    maxAge: '1y',
-  };
+  maxAge: '1y',
+};
 require("./base/moongosedb");
 const prefix = '/api';
-app.use(prefix+"/fichier_assignment_eleve", express.static("fichier_assignment_eleve", staticOptions));
-app.use(prefix+"/",authRoute)
-app.use(prefix+"/auth",authRoute)
+app.use(prefix + "/fichier_assignment_eleve", express.static("fichier_assignment_eleve", staticOptions));
+app.use(prefix + "/", authRoute)
+app.use(prefix + "/auth", authRoute)
 app.use(verifyToken);
-app.use(prefix+"/assignment",assignmenthRoute)
-app.use(prefix+"/matiere",matiereRoute)
-app.use(prefix+"/utilisateur",utilisateurRoute)
+app.use(prefix + "/assignment", assignmenthRoute)
+app.use(prefix + "/matiere", matiereRoute)
+app.use(prefix + "/utilisateur", utilisateurRoute)
+app.use(prefix + "/test", testRoute)
 
 
 module.exports = app;
