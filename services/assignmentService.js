@@ -6,6 +6,9 @@ const assignmentEleve = require("../models/assignmentEleve")
 const matiere = require("../models/matiere");
 const { isNumber } = require("../util/fonction");
 const services = require("./daoService");
+const {
+    GetNameFichierAndUploadFichier
+} = require("../util/fonction");
 
 
 const GetAllAssignment = async (req, res) => {
@@ -175,32 +178,32 @@ const GetAssignmentByIdWithDetailsFiltered = async (req, res) => {
     try {
 
         const assignmentElevesRenduFalse = await assignmentEleve.find({ assignment: assignmentId, rendu: false })
-        .populate({
-            path: 'eleve',
-            model: 'utilisateurs',
-            select: '_id nom prenom email',
-            
-        }).populate({
-            path: 'assignment',
-            select: '-assignmenteleves',
-            populate: {
-                path: 'matiere'
-            }
-        }).exec();
-        
+            .populate({
+                path: 'eleve',
+                model: 'utilisateurs',
+                select: '_id nom prenom email',
+
+            }).populate({
+                path: 'assignment',
+                select: '-assignmenteleves',
+                populate: {
+                    path: 'matiere'
+                }
+            }).exec();
+
         const assignmentElevesRenduTrue = await assignmentEleve.find({ assignment: assignmentId, rendu: true })
-        .populate({
-            path: 'eleve',
-            model: 'utilisateurs',
-            select: '_id nom prenom email',
-            
-        }).populate({
-            path: 'assignment',
-            select: '-assignmenteleves',
-            populate: {
-                path: 'matiere'
-            }
-        }).exec();
+            .populate({
+                path: 'eleve',
+                model: 'utilisateurs',
+                select: '_id nom prenom email',
+
+            }).populate({
+                path: 'assignment',
+                select: '-assignmenteleves',
+                populate: {
+                    path: 'matiere'
+                }
+            }).exec();
 
         return res.status(200).json({
             rendu_false: assignmentElevesRenduFalse,
@@ -290,6 +293,34 @@ const getUserAssignement = async (req, res) => {
     }
 }
 
+const updateAssignementEleve = async (req, res) => {
+    try {
+        let id = req.params.idAsignEleve;
+        let { description } = req.body;
+        var fichierName = GetNameFichierAndUploadFichier(req, 'fichier');
+
+        let value = {};
+        description ? value.description = description : null;
+        fichierName ? value.fichier = fichierName : null;
+
+        if (value.description || value.fichier) {
+            let updateObj = await services.updateAssignementEleve(id, value);
+        } else {
+            return res.status(400).json({
+                message: 'BAD REQUEST',
+                details: "Aucune  valeur  n' est  passé  en body "
+            })
+        }
+        return res.status(200).json({
+            message: 'SUCCESS',
+            details: "update  effectué "
+        })
+
+    } catch (error) {
+        console.log("🚀 ~ testAPI ~ error:", error)
+        return res.status(500).json(error);
+    }
+}
 
 
 
@@ -303,5 +334,6 @@ module.exports = {
     GetAssignmentByIdWithDetailsFiltered,
     AjouterNoteAssignmentEleve,
     GetAssignmentEleveById,
-    getUserAssignement
+    getUserAssignement,
+    updateAssignementEleve
 }

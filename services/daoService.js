@@ -92,10 +92,24 @@ const getAllAssignmentUser = async (asignFiltre) => {
 }
 
 
-
+const updateAssignementEleve = async (id, data) => {
+    try {
+        let now = new Date();
+        data.dateRendu = now
+        const update = {
+            $set: data
+        };
+        const options = { new: true };
+        let updateObj = await assignmentEleve.findByIdAndUpdate(id, update, options);
+        return updateObj;
+    } catch (error) {
+        throw error;
+    }
+}
 
 
 module.exports = {
     testAPI,
-    getAllAssignmentUser
+    getAllAssignmentUser,
+    updateAssignementEleve
 }

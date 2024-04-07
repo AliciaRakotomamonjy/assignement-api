@@ -181,13 +181,13 @@ const Inscription = async (req, res) => {
 }
 const FaireDevoir = async (req, res) => {
     try {
-        var fichierName = GetNameFichierAndUploadFichier(req, 'fichier');
+        let fichierName = GetNameFichierAndUploadFichier(req, 'fichier');
         const AssignEleve = {
             description: req.body.description,
             eleve: req.utilisateur.id,
-            assignment:req.body.assignmentId,
-            fichier:fichierName,
-            dateRendu:new Date()
+            assignment: req.body.assignmentId,
+            fichier: fichierName,
+            dateRendu: new Date()
         }
         await assignmentEleve(AssignEleve).save();
         return res.status(201).json({
