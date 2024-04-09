@@ -189,9 +189,15 @@ const FaireDevoir = async (req, res) => {
             fichier: fichierName,
             dateRendu: new Date()
         }
+        const verifDejaFait = await assignmentEleve.findOne({ eleve: AssignEleve.eleve, assignment: AssignEleve.assignment }).exec();
+        if (verifDejaFait) {
+            return res.status(400).json({
+                message: "Attention ! Vous avez déjà soumis ce devoir. Veuillez vérifier vos soumissions précédentes."
+            });
+        }
         await assignmentEleve(AssignEleve).save();
         return res.status(201).json({
-            message: "Votre assignment est fait!!"
+            message: "Félicitations ! Votre devoir est terminé avec succès !"
         });
     } catch (error) {
         console.log(error)
