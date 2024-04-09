@@ -41,34 +41,12 @@ const Login = async (req, res) => {
         })
         var token = null;
         if (m == null) {
-            token = jwt.sign({
-                email: existUtilisateur.email,
-                id: existUtilisateur._id,
-                nom: existUtilisateur.nom,
-                prenom: existUtilisateur.prenom,
-                photo: existUtilisateur.photo,
-                role: existUtilisateur.role,
-            }, SECRET_KEY, {
-                expiresIn: process.env.EXPIRATION_TOKEN
-            });
+            token = getTokenEtudiant(existUtilisateur);
         } else {
-            token = jwt.sign({
-                email: existUtilisateur.email,
-                id: existUtilisateur._id,
-                nom: existUtilisateur.nom,
-                prenom: existUtilisateur.prenom,
-                photo: existUtilisateur.photo,
-                role: existUtilisateur.role,
-                matiere_id: m._id,
-                matiere_libelle: m.libelle,
-            }, SECRET_KEY, {
-                expiresIn: process.env.EXPIRATION_TOKEN
-            });
+            token = getTokenProfesseur(existUtilisateur)
         }
         console.log("token", token)
         res.status(200).json({
-            nom: existUtilisateur.nom,
-            prenom: existUtilisateur.prenom,
             token: token,
         });
     } catch (error) {
@@ -80,6 +58,33 @@ const Login = async (req, res) => {
     }
 }
 
+function getTokenProfesseur(existUtilisateur) {
+    return jwt.sign({
+        email: existUtilisateur.email,
+        id: existUtilisateur._id,
+        nom: existUtilisateur.nom,
+        prenom: existUtilisateur.prenom,
+        photo: existUtilisateur.photo,
+        role: existUtilisateur.role,
+        matiere_id: m._id,
+        matiere_libelle: m.libelle,
+    }, SECRET_KEY, {
+        expiresIn: process.env.EXPIRATION_TOKEN
+    });
+}
+
+function getTokenEtudiant(utilisateur_) {
+    return jwt.sign({
+        email: utilisateur_.email,
+        id: utilisateur_._id,
+        nom: utilisateur_.nom,
+        prenom: utilisateur_.prenom,
+        photo: utilisateur_.photo,
+        role: utilisateur_.role,
+    }, SECRET_KEY, {
+        expiresIn: process.env.EXPIRATION_TOKEN
+    });
+}
 const Inscription = async (req, res) => {
 
     const {
@@ -139,36 +144,15 @@ const Inscription = async (req, res) => {
                 professeur: utilisateur_._id
             };
             nv_matier = await matiere(mat).save();
-            token = jwt.sign({
-                email: utilisateur_.email,
-                id: utilisateur_._id,
-                nom: utilisateur_.nom,
-                prenom: utilisateur_.prenom,
-                photo: utilisateur_.photo,
-                role: utilisateur_.role,
-                matiere_id: nv_matier._id,
-                matiere_libelle: nv_matier.libelle
-            }, SECRET_KEY, {
-                expiresIn: process.env.EXPIRATION_TOKEN
-            });
+            token = getTokenProfesseur(utilisateur_)
+
         } else {
-            token = jwt.sign({
-                email: utilisateur_.email,
-                id: utilisateur_._id,
-                nom: utilisateur_.nom,
-                prenom: utilisateur_.prenom,
-                photo: utilisateur_.photo,
-                role: utilisateur_.role,
-            }, SECRET_KEY, {
-                expiresIn: process.env.EXPIRATION_TOKEN
-            });
+            token = getTokenEtudiant(utilisateur_)
         }
 
 
         console.log("token", token)
         res.status(200).json({
-            nom: utilisateur_.nom,
-            prenom: utilisateur_.prenom,
             token: token,
             message: "inscription fini"
         })
@@ -189,7 +173,10 @@ const FaireDevoir = async (req, res) => {
             fichier: fichierName,
             dateRendu: new Date()
         }
-        const verifDejaFait = await assignmentEleve.findOne({ eleve: AssignEleve.eleve, assignment: AssignEleve.assignment }).exec();
+        const verifDejaFait = await assignmentEleve.findOne({
+            eleve: AssignEleve.eleve,
+            assignment: AssignEleve.assignment
+        }).exec();
         if (verifDejaFait) {
             return res.status(400).json({
                 message: "Attention ! Vous avez déjà soumis ce devoir. Veuillez vérifier vos soumissions précédentes."
@@ -206,8 +193,43 @@ const FaireDevoir = async (req, res) => {
         });
     }
 }
+const ModifierProfile = async (req, res) => {
+    try {
+        let utilisateur_ = {
+            nom: req.body.nom,
+            prenom: req.body.prenom
+        }
+        if (req.files[0]) {
+            utilisateur_.photo = GetNameFichierAndUploadFichier(req, 'image');
+        }
+        utilisateur.findByIdAndUpdate(req.utilisateur.id, utilisateur_, {
+            new: true
+        }).then(result => {
+            if (result) {
+                console.log(result)
+                const token = getTokenEtudiant(result);
+                res.status(201).json({
+                    message: "Modification effectuée avec succès",
+                    token: token,
+                })
+            } else {
+                res.status(404).json({
+                    message: " Inpossible de faire la modification."
+                })
+            }
+        });
+        return res.status(200);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            message: "Erreur dans votre code"
+        });
+    }
+}
+
 module.exports = {
     Login,
     Inscription,
-    FaireDevoir
+    FaireDevoir,
+    ModifierProfile
 }

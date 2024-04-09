@@ -8,6 +8,7 @@ var router = express.Router();
 const utilisateurService = require("../services/utilisateurService");
 
 router.route("/fairedevoir").put(upload.any(),utilisateurService.FaireDevoir);
+router.route("/modifier_profile").put(upload.any(),utilisateurService.ModifierProfile);
 
 module.exports =router;
 

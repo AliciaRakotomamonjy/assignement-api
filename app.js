@@ -25,10 +25,11 @@ const staticOptions = {
 };
 require("./base/moongosedb");
 const prefix = '/api';
-app.use(prefix + "/fichier_assignment_eleve", express.static("fichier_assignment_eleve", staticOptions));
+app.use(prefix + "/img", express.static("img", staticOptions));
 app.use(prefix + "/", authRoute)
 app.use(prefix + "/auth", authRoute)
 app.use(verifyToken);
+app.use(prefix + "/fichier_assignment_eleve", express.static("fichier_assignment_eleve", staticOptions));
 app.use(prefix + "/assignment", assignmenthRoute)
 app.use(prefix + "/matiere", matiereRoute)
 app.use(prefix + "/utilisateur", utilisateurRoute)
