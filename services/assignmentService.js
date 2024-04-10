@@ -9,6 +9,8 @@ const services = require("./daoService");
 const {
     GetNameFichierAndUploadFichier
 } = require("../util/fonction");
+const utilisateur = require("../models/utilisateur");
+const { SendMail } = require("../util/Mail");
 
 
 const GetAllAssignment = async (req, res) => {
@@ -141,13 +143,32 @@ const AjouterAssignmnet = async (req, res) => {
             matiere: matiere._id,
             dateLimite: dateLimite
         }).save()
+        utilisateur.find({role:'eleve'}).then((listEleve)=>{
+            for (let index = 0; index < listEleve.length; index++) {
+                const eleve = listEleve[index];
+                SendMail(eleve.email,"Nouvel assignment de "+matiere.libelle+" ajouté",GetMessageMailAjoutAssignment(eleve,matiere.libelle,dateLimite,description))
+            }
+        })
         return res.status(200).json({
             message: "Votre devoir est bien ajouté"
         })
     })
 
 }
+function GetMessageMailAjoutAssignment(eleve,matiere,datelimite,description) {
+    const message = `
+    Bonjour ${eleve.nom} ${eleve.prenom},
 
+    Je tenais à vous informer qu'un nouvel assignment a été ajouté pour la matière "${matiere}".
+
+    Description de l'assignment : ${description}
+    
+
+    Date limite de soumission : ${datelimite}
+    `;
+    
+    return message.trim(); // Supprimer les espaces indésirables
+}
 const GetAssignmentByIdWithDetails = (req, res) => {
     let assignmentId = req.params.id;
     assignment.findById(assignmentId)

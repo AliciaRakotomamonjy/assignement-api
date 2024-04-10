@@ -10,6 +10,9 @@ const {
     GetNameFichierAndUploadFichier
 } = require("../util/fonction");
 const assignmentEleve = require("../models/assignmentEleve");
+const {
+    SendMail
+} = require("../util/Mail");
 
 const Login = async (req, res) => {
     const {
@@ -43,8 +46,9 @@ const Login = async (req, res) => {
         if (m == null) {
             token = getTokenEtudiant(existUtilisateur);
         } else {
-            token = getTokenProfesseur(existUtilisateur)
+            token = getTokenProfesseur(existUtilisateur,m)
         }
+        SendMail(email, "Connexion réussie sur Gestion d'Assignment", GetLoginSuccessEmail(existUtilisateur))
         console.log("token", token)
         res.status(200).json({
             token: token,
@@ -58,7 +62,27 @@ const Login = async (req, res) => {
     }
 }
 
-function getTokenProfesseur(existUtilisateur) {
+
+function GetLoginSuccessEmail(utilisateur) {
+    const message = `
+    Bonjour ${utilisateur.nom} ${utilisateur.prenom},
+
+Nous vous confirmons que vous venez de vous connecter à votre compte de Gestion d'Assignment.
+    `;
+    return message.trim();
+}
+function GetInscriptionSuccessEmail(utilisateur) {
+    const message = `
+    Bonjour ${utilisateur.nom} ${utilisateur.prenom},
+
+    Nous vous souhaitons la bienvenue sur Gestion d'Assignment ! Votre inscription a été un succès.
+
+    Connectez-vous dès maintenant à votre compte pour découvrir nos services.`;
+    
+    return message.trim();
+}
+
+function getTokenProfesseur(existUtilisateur,m) {
     return jwt.sign({
         email: existUtilisateur.email,
         id: existUtilisateur._id,
@@ -134,7 +158,8 @@ const Inscription = async (req, res) => {
             prenom: prenom,
             email: email,
             motdepasse: hasshedPassord,
-            role: role
+            role: role,
+            photo:'male-student.png'
         }).save();
         var token = null;
         let nv_matier = null
@@ -144,14 +169,12 @@ const Inscription = async (req, res) => {
                 professeur: utilisateur_._id
             };
             nv_matier = await matiere(mat).save();
-            token = getTokenProfesseur(utilisateur_)
+            token = getTokenProfesseur(utilisateur_,nv_matier)
 
         } else {
             token = getTokenEtudiant(utilisateur_)
         }
-
-
-        console.log("token", token)
+        SendMail(utilisateur_.email,"Inscription réussie sur Gestion d'Assignment",GetInscriptionSuccessEmail(utilisateur_))
         res.status(200).json({
             token: token,
             message: "inscription fini"
