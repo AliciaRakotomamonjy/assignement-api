@@ -45,4 +45,3 @@
 - **Conception avec création des modèles sur Angular et Express :**
   - Définition des modèles nécessaires à l'application sur les frameworks Angular et Express.
 - **Vidéo :**
-  - En cours de réalisation.
