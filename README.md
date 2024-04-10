@@ -40,7 +40,7 @@
   - Mise en œuvre de la fonctionnalité permettant aux élèves de soumettre leurs devoirs en exportant des fichiers.
 - **Profil élève avec édition de profil et import de photo de profil :**
   - Implémentation de la page de profil élève avec possibilité d'édition de profil et d'import de photo de profil.
-**Déploiement du Front-end Angular :**
+- **Déploiement du Front-end Angular :**
   - Henintsoa a créé un serveur Node.js pour héberger le build du projet Angular. Le build a été généré avec la commande `ng build`, et un serveur Node avec un fichier `app.js` a été configuré pour servir les fichiers statiques générés lors de la construction de l'application Angular.
 ## Contribution commune
 - **Conception avec création des modèles sur Angular et Express :**
