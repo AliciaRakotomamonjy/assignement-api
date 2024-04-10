@@ -23,9 +23,9 @@
 - **Login (back et front) avec Token :**
   - Implémentation de la fonctionnalité de connexion à l'application.
   - Utilisation de snack-bar et `<mat-progress-spinner>` pour les notifications et les indicateurs de chargement.
+  - Configuration et intégration de l'envoi de courriels aux utilisateurs après leur conneexion.
 - **Inscription :**
   - Mise en place de la fonctionnalité d'inscription avec snack-bar et `<mat-progress-spinner>`.
-- **Envoi de Mail après Inscription :**
   - Configuration et intégration de l'envoi de courriels aux utilisateurs après leur inscription.
 - **Affichage d'assignments avec `<mat-paginator>` :**
   - Développement de la fonctionnalité pour afficher les devoirs avec pagination.
