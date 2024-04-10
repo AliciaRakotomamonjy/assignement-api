@@ -13,6 +13,7 @@ const assignmentEleve = require("../models/assignmentEleve");
 const {
     SendMail
 } = require("../util/Mail");
+const assignment = require("../models/assignment");
 
 const Login = async (req, res) => {
     const {
@@ -205,7 +206,12 @@ const FaireDevoir = async (req, res) => {
                 message: "Attention ! Vous avez déjà soumis ce devoir. Veuillez vérifier vos soumissions précédentes."
             });
         }
-        await assignmentEleve(AssignEleve).save();
+        const assignmentEleveInstance = await assignmentEleve(AssignEleve).save();
+        const assignment = await assignment.findOneAndUpdate(
+            { _id: AssignEleve.assignment }, 
+            { $push: { assignmenteleves: assignmentEleveInstance._id } }, 
+            { new: true }
+        ).exec();
         return res.status(201).json({
             message: "Félicitations ! Votre devoir est terminé avec succès !"
         });
