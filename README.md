@@ -1,6 +1,6 @@
 # Contributions au Projet Assignment
 
-## Rakotomamony Alicia
+## Rakotomamonjy Alicia
 
 - **Mise en place de l'environnement de développement :**
   - Configuration de Git, Angular, MongoDB, Express, etc.
