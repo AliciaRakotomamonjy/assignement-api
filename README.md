@@ -16,7 +16,7 @@
   - Création de la page de profil du professeur avec possibilité d'édition de profil et d'import de photo de profil.
 - **Déploiement :**
   - Déploiement du backend sur [https://mbds-assignement-api.onrender.com](https://mbds-assignement-api.onrender.com).
-  - Déploiement du frontend (en cours) par Alicia.
+  - Déploiement du frontend 
 
 ## Ratsimbazafy Henintsoa Elysée
 
