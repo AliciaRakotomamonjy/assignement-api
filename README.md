@@ -4,8 +4,6 @@
 
 - **Mise en place de l'environnement de développement :**
   - Configuration de Git, Angular, MongoDB, Express, etc.
-- **Conception avec création des modèles sur Angular et Express :**
-  - Définition des modèles nécessaires à l'application sur les frameworks Angular et Express.
 - **Template avec menu :**
   - Création d'un modèle de page avec un menu comprenant toolbar et sidebar.
 - **Fiche de devoir & liste des devoirs des élèves avec widgets tables :**
@@ -45,6 +43,7 @@
   - Implémentation de la page de profil élève avec possibilité d'édition de profil et d'import de photo de profil.
 
 ## Contribution commune
-
+- **Conception avec création des modèles sur Angular et Express :**
+  - Définition des modèles nécessaires à l'application sur les frameworks Angular et Express.
 - **Vidéo :**
   - En cours de réalisation.
