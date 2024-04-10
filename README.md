@@ -31,7 +31,6 @@
   - Développement de la fonctionnalité pour afficher les devoirs avec pagination.
 - **Ajout de devoir en utilisant stepper :**
   - Implémentation de l'ajout de devoirs via un processus de type stepper.
-- **Envoi de mail aux étudiants pour les informer des nouveaux devoirs :**
   - Intégration de la fonctionnalité d'envoi de notifications par courriel aux étudiants.
 - **Édition et suppression de devoir :**
   - Ajout des fonctionnalités d'édition et de suppression de devoirs avec notifications snack-bar et `<mat-progress-spinner>`.
