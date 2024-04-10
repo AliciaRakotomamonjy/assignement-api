@@ -46,3 +46,28 @@
 - **Conception avec création des modèles sur Angular et Express :**
   - Définition des modèles nécessaires à l'application sur les frameworks Angular et Express.
 - **Vidéo**
+
+# Instructions pour exécuter le projet Assignment
+1. **API Backend :**
+- Accédez au dossier `assignment-api`.
+- Installez les dépendances en exécutant la commande suivante :
+  ```
+  npm install
+  ```
+- Démarrez l'API localement en exécutant la commande :
+  ```
+  npm start
+  ```
+L'API sera disponible à l'adresse http://localhost:3001.
+
+3. **Application Frontend Angular :**
+- Accédez au dossier `assignment-app`.
+- Si vous souhaitez utiliser l'API localement, ouvrez le fichier `src/environments/environment.ts` et modifiez la valeur de `API_URL` pour `http://localhost:3001`.
+- Installez les dépendances en exécutant la commande suivante :
+  ```
+  npm install
+  ```
+- Lancez l'application en exécutant la commande :
+  ```
+  ng serve 
+  ```
