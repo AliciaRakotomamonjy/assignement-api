@@ -36,7 +36,7 @@
   - Ajout des fonctionnalités d'édition et de suppression de devoirs avec notifications snack-bar et `<mat-progress-spinner>`.
 - **Liste de devoirs pour les élèves :**
   - Développement de la fonctionnalité permettant aux élèves de voir la liste des devoirs avec des widgets tables et `<mat-progress-spinner>` pour les indicateurs de chargement.
-- **Faire les devoirs avec export de fichier :**
+- **Faire les devoirs avec import de fichier :**
   - Mise en œuvre de la fonctionnalité permettant aux élèves de soumettre leurs devoirs en exportant des fichiers.
 - **Profil élève avec édition de profil et import de photo de profil :**
   - Implémentation de la page de profil élève avec possibilité d'édition de profil et d'import de photo de profil.
