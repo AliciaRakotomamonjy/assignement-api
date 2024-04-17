@@ -52,7 +52,7 @@
         - **Deux dates spécifiées**, restreignant l'affichage aux devoirs dont la date limite se situe entre ces deux points.
         - **Une deuxième date spécifiée seule**, affichant uniquement les devoirs dont la date limite est strictement antérieure à cette date.
 - **Faire les devoirs avec import de fichier :**
-  - Mise en œuvre de la fonctionnalité permettant aux élèves de soumettre leurs devoirs en exportant des fichiers.
+  - Mise en œuvre de la fonctionnalité permettant aux élèves de soumettre leurs devoirs en important des fichiers.
 - **Profil élève avec édition de profil et import de photo de profil :**
   - Implémentation de la page de profil élève avec possibilité d'édition de profil et d'import de photo de profil.
 - **Déploiement du Front-end Angular :**
