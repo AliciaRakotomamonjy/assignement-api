@@ -207,7 +207,7 @@ const FaireDevoir = async (req, res) => {
             });
         }
         const assignmentEleveInstance = await assignmentEleve(AssignEleve).save();
-        const assignment = await assignment.findOneAndUpdate(
+        const assignment_ = await assignment.findOneAndUpdate(
             { _id: AssignEleve.assignment }, 
             { $push: { assignmenteleves: assignmentEleveInstance._id } }, 
             { new: true }
