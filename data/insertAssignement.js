@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({path: '../.env' });
 require("../base/moongosedb");
 
 const matiere = require("../models/matiere");
@@ -10,9 +10,9 @@ function getRandomDate(start, end) {
 
 function setupDateRanges() {
     const startPublication = new Date('2024-01-01T00:00:00Z');
-    const endPublication = new Date();
-    const startLimite = new Date('2024-04-19T00:00:00Z');
-    const endLimite = new Date('2024-06-30T23:59:59Z');
+    const endPublication = new Date('2024-04-30T00:00:00Z');
+    const startLimite = new Date('2024-05-01T00:00:00Z');
+    const endLimite = new Date('2024-12-01T23:59:59Z');
 
     return { startPublication, endPublication, startLimite, endLimite };
 }

@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({path: '../.env' });
 require("../base/moongosedb");
 
 const utilisateur = require("../models/utilisateur");
