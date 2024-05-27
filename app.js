@@ -18,7 +18,7 @@ const utilisateurRoute = require("./routes/utilisateurRoute");
 const authRoute = require("./routes/authRoute");
 const assignmenthRoute = require("./routes/assignmentRoute");
 const matiereRoute = require("./routes/matiereRoute");
-const testRoute = require("./routes/testRoute");
+const assignmentEleveRoute = require("./routes/assignmentEleveRoute");
 
 const staticOptions = {
   maxAge: '1y',
@@ -33,7 +33,7 @@ app.use(prefix + "/fichier_assignment_eleve", express.static("fichier_assignment
 app.use(prefix + "/assignment", assignmenthRoute)
 app.use(prefix + "/matiere", matiereRoute)
 app.use(prefix + "/utilisateur", utilisateurRoute)
-app.use(prefix + "/test", testRoute)
+app.use(prefix + "/assignmentEleve",assignmentEleveRoute)
 
 
 module.exports = app;

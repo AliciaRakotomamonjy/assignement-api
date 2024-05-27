@@ -18,6 +18,7 @@ router.route("/ajouternoteassignmenteleve").put(assignmentService.AjouterNoteAss
 router.route("/getassignmentelevebyid/:id").get(assignmentService.GetAssignmentEleveById);
 router.route("/eleve").get(assignmentService.getUserAssignement);
 router.route("/devoir/:idAsignEleve").put(upload.any(), assignmentService.updateAssignementEleve);
+router.route("/eleve/telecharger").get(assignmentService.telechargementFichierEleve);
 // router.route("/inscription").post(utilisateurService.Inscription);
 
 

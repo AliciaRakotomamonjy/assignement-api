@@ -4,7 +4,7 @@ const {
 const assignment = require("../models/assignment")
 const assignmentEleve = require("../models/assignmentEleve")
 const matiere = require("../models/matiere");
-const { isNumber } = require("../util/fonction");
+const { isNumber, getPathFileEleve } = require("../util/fonction");
 const services = require("./daoService");
 const {
     GetNameFichierAndUploadFichier
@@ -346,6 +346,22 @@ const updateAssignementEleve = async (req, res) => {
     }
 }
 
+const telechargementFichierEleve = (req, res) => {
+    try {
+        let nomFichier = req.query
+        let cheminVersFichier = getPathFileEleve(nomFichier);
+
+        res.download(cheminVersFichier, nomFichier, (err) => {
+            if (err) {
+                console.error('Erreur lors du téléchargement du fichier :', err);
+                res.status(500).send('Erreur lors du téléchargement du fichier.');
+            }
+        });
+    } catch (error) {
+        return res.status(500).json(error);
+    }
+}
+
 
 
 module.exports = {
@@ -359,5 +375,6 @@ module.exports = {
     AjouterNoteAssignmentEleve,
     GetAssignmentEleveById,
     getUserAssignement,
-    updateAssignementEleve
+    updateAssignementEleve,
+    telechargementFichierEleve
 }
