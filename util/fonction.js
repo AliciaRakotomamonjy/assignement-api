@@ -35,8 +35,21 @@ const isNumber = (str) => {
     return /^-?\d*\.?\d+$/.test(str);
 }
 
+const getPathFileEleve = (nomFichier) => {
+    const appDir = path.dirname(require.main.path)
+    const dossier = path.join(appDir, 'fichier_assignment_eleve');
+    const cheminFichier = path.join(dossier, nomFichier); 
+    return cheminFichier
+}
+
+const fichierExiste = (cheminVersFichier) => {
+    return fs.existsSync(cheminVersFichier);
+}
+
 
 module.exports = {
     GetNameFichierAndUploadFichier,
-    isNumber
+    isNumber,
+    getPathFileEleve,
+    fichierExiste,
 }
