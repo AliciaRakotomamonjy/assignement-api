@@ -41,7 +41,20 @@ const update = async (id, data) => {
             $set: data
         };
         const options = { new: true };
-        let updateObj = await assignmentEleve.findByIdAndUpdate(id, update, options);
+        let updateObj = await assignmentEleve.findByIdAndUpdate(id, update, options).populate({
+            path: 'eleve',
+            model: 'utilisateurs',
+            select: '_id nom prenom email',
+        }).populate({
+            path: 'assignment',
+            select: '-assignmenteleves',
+            populate: {
+                path: 'matiere',
+                populate: {
+                    path: 'professeur'
+                }
+            }
+        });
         return updateObj;
     } catch (error) {
         throw error;
@@ -70,6 +83,16 @@ const find = async (asignFiltre) => {
         }
         if (asignFiltre.ideleve) {
             filters.eleve = new ObjectId(asignFiltre.ideleve);
+        }
+        if (asignFiltre.description) {
+            filters.description = new RegExp(asignFiltre.description,"i");
+        }
+        if (asignFiltre.rendu) {
+            if(asignFiltre.rendu == "OUI"){
+                filters.rendu = true;
+            }else if(asignFiltre.rendu == "NON"){
+                filters.rendu = false;
+            }
         }
 
         aggregateQuery.sort({ 'dateRendu': -1 });

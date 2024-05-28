@@ -1,5 +1,5 @@
 const assignmentEleveService = require("../services/assignmentEleveService");
-const { isNumber, getPathFileEleve, fichierExiste } = require("../util/fonction");
+const { isNumber, getPathFileEleve, fichierExiste, GetNameFichierAndUploadFichier, UpdateFichier } = require("../util/fonction");
 
 const GetAssignmentEleveById = async (req, res) => {
     let assignmentEleveId = req.params.id;
@@ -18,8 +18,9 @@ const GetAssignmentEleveById = async (req, res) => {
 const UpdateAssignementEleve = async (req, res) => {
     try {
         let id = req.params.id;
-        let { description } = req.body;
-        var fichierName = GetNameFichierAndUploadFichier(req, 'fichier');
+        let { description} = req.body;
+        let assignmentEleve = await assignmentEleveService.findByIdSimple(id);
+        var fichierName = UpdateFichier(req, 'fichier',assignmentEleve.fichier);
 
         let value = {};
         description ? value.description = description : null;
@@ -47,7 +48,7 @@ const UpdateAssignementEleve = async (req, res) => {
 
 const GetAssignementEleve = async (req, res) => {
     try {
-        let { dateDebut, dateFin, idMatiere, page, limit } = req.query;
+        let { dateDebut, dateFin, idMatiere, description,rendu, page, limit } = req.query;
         let iduser = req.utilisateur;
         let filtre = {
             dateDebut,
@@ -55,7 +56,9 @@ const GetAssignementEleve = async (req, res) => {
             matiere: idMatiere,
             ideleve: iduser,
             page,
-            limit
+            limit,
+            description,
+            rendu
         }
         let result = await assignmentEleveService.find(filtre);
         return res.status(200).json(result);
