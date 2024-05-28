@@ -35,6 +35,9 @@ const GetAllAssignment = async (req, res) => {
                 $lte: new Date(req.query.dateFin)
             };
         }
+        if (req.query.description !== undefined) {
+            filters.description = new RegExp(req.query.description,"i")
+        }
         if (req.query.matiere != undefined && req.query.matiere !== 'all') {
             filters.matiere = new ObjectId(req.query.matiere);
         }
