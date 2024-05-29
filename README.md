@@ -87,3 +87,14 @@ L'API sera disponible à l'adresse http://localhost:3001.
   ```
   ng serve 
   ```
+
+## Comptes de Test
+
+### Professeur
+- **Adresse-Email** : melanie.leroy@gmail.com
+- **Mot de passe** : ABC123abc.
+
+### Élève
+- **Adresse-Email** : henintsoa.corban@gmail.com
+- **Mot de passe** : ABC123abc.
+
