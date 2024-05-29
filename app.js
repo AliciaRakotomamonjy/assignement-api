@@ -18,6 +18,7 @@ const utilisateurRoute = require("./routes/utilisateurRoute");
 const authRoute = require("./routes/authRoute");
 const assignmenthRoute = require("./routes/assignmentRoute");
 const matiereRoute = require("./routes/matiereRoute");
+const statistiqueRoute = require("./routes/statistiqueRoute");
 const assignmentEleveRoute = require("./routes/assignmentEleveRoute");
 
 const staticOptions = {
@@ -34,6 +35,7 @@ app.use(prefix + "/assignment", assignmenthRoute)
 app.use(prefix + "/matiere", matiereRoute)
 app.use(prefix + "/utilisateur", utilisateurRoute)
 app.use(prefix + "/assignmentEleve",assignmentEleveRoute)
+app.use(prefix + "/statistique",statistiqueRoute)
 
 
 module.exports = app;
