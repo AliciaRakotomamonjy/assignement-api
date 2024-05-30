@@ -1,6 +1,6 @@
 # Contributions au Projet Assignment
 
-## Rakotomamonjy Alicia
+## Rakotomamonjy Nambinina Henintsoa Alicia
 
 - **Mise en place de l'environnement de développement :**
   - Configuration de Git, Angular, MongoDB, Express, etc.
@@ -8,12 +8,37 @@
   - Création d'un modèle de page avec un menu comprenant toolbar et sidebar.
 - **Fiche de devoir & liste des devoirs des élèves avec widgets tables :**
   - Mise en place de la vue des devoirs et des listes de devoirs des élèves avec des widgets tables.
+  - Filtrage : Permet aux élèves de filtrer les assignments de manière efficace selon des critères spécifiques :
+      - **Par description :** Aide à trouver rapidement les assignments à partir de la description en saisissant un mot clé.
+      - **Par Matière :** Aide à trouver rapidement les assignments d'une matière donnée.
+      - **Par Date Limite :** Offre la possibilité de filtrer les assignments en fonction de leur date limite, avec des conditions flexibles :
+        - Si **une date** est spécifiée, les assignments affichés auront une date limite **supérieure** à cette date.
+        - Si **deux dates** sont données, seuls les assignments situés **entre** ces dates seront présentés.
+        - Si **seulement la deuxième date** est spécifiée, les assignments montrés auront une date limite **strictement inférieure** à cette date.
 - **Affichage de devoirs rendus et non rendus avec drag and drop :**
   - Implémentation de la fonctionnalité permettant d'afficher les devoirs rendus et non rendus avec la possibilité de les trier par glisser-déposer.
 - **Attribution de notes aux devoirs :**
   - Développement de la fonctionnalité permettant aux enseignants d'attribuer des notes aux devoirs avec notifications snack-bar.
 - **Profil professeur avec édition de profil et import de photo de profil :**
   - Création de la page de profil du professeur avec possibilité d'édition de profil et d'import de photo de profil.
+- **Liste des Assignments d'un élève connecté :**
+  - Création d'une fonctionnalité offrant à un élève la possibilité de consulter la liste des devoirs qu'il a rendu de manière intuitive, en utilisant des tables pour l'affichage et `<mat-progress-spinner>` pour les indicateurs de chargement. Cette fonctionnalité est enrichie par la pagination et des options de filtrage avancées, améliorant l'expérience utilisateur par une navigation et une recherche optimisées. Les aspects clés comprennent :
+    - **Widgets Tables :** Utilisés pour présenter les devoirs de manière organisée, permettant aux élèves de parcourir facilement les informations pertinentes.
+    - **Indicateurs de Chargement :** `<mat-progress-spinner>` indique visuellement l'état de chargement des devoirs, fournissant un feedback instantané et améliorant la réactivité de l'interface.
+    - **Pagination :** Permet de naviguer entre les pages de devoirs, évitant ainsi la surcharge visuelle et facilitant l'accès aux différentes sections de la liste.
+    - **Filtrage :** Comme pour l'affichage des assignments, les élèves peuvent filtrer les devoirs selon des critères détaillés pour affiner leur recherche :
+      - **Par description :** Aide les élèves à trouver les devoirs relatifs à partir d'un mot clé se trouvant dans la description 
+      - **Par etat :** Aide les élèves à trouver les devoirs relatifs par rapport à l'état de son devoir, rendu ou pas encore rendu
+      - **Par Matière :** Aide les élèves à trouver les devoirs relatifs à une matière spécifique de façon rapide et efficace.
+      - **Par Date Limite :** Les options de filtrage par date limite sont identiques à celles mentionnées précédemment, offrant la flexibilité nécessaire pour afficher les devoirs selon :
+        - **Une date spécifiée**, montrant les devoirs avec une date limite postérieure.
+        - **Deux dates spécifiées**, restreignant l'affichage aux devoirs dont la date limite se situe entre ces deux points.
+        - **Une deuxième date spécifiée seule**, affichant uniquement les devoirs dont la date limite est strictement antérieure à cette date.
+- **Téléchargement et modification des fichiers insérés par les étudiants :**
+  - Implémentation du téléchargement du fichier des élèves dans la page détail des assignments élèves 
+  - Possibilité de modifier les fichiers pour les devoirs pas encore rendus
+- **Statistique pour voir les performances d'un élève pendant une intervalle de date :**
+  - Utilisation de la librairie `apexcharts`. Cette fonctionnalité permet à l'élève de voir ses performances pour toutes les matières. Il peut également choisir une intervalle de date.
 - **Déploiement :**
   - Déploiement du backend sur [https://mbds-assignement-api.onrender.com](https://mbds-assignement-api.onrender.com).
   - Déploiement du frontend : https://mbds-assignement-app.onrender.com/login?fbclid=IwZXh0bgNhZW0CMTAAAR2WNDsA6hUyHr4degDwzfnmdKVGifn_qyo5_RRpMjNYx2QCji83IA6zoDQ_aem_ATzhgpmRrOsEpFYxmn5HOHYsvnWovQw63DyftSVShOu2fYfxy2OlGRy_M96jt9S7_dprJbPsb5TAVXd0rNHCH84O
@@ -29,7 +54,7 @@
   - Configuration et intégration de l'envoi de courriels aux utilisateurs après leur inscription.
 - **Pagination, Filtrage et Affichage de la liste des Assignments avec `<mat-paginator>` pour les professeurs:**
   - Développement de la fonctionnalité pour afficher les devoirs avec pagination.
-  - Filtrage : Permet aux utilisateurs de filtrer les assignments de manière efficace selon des critères spécifiques :
+  - Filtrage : Permet aux élèves de filtrer les assignments de manière efficace selon des critères spécifiques :
       - **Par Matière :** Aide à trouver rapidement les assignments d'une matière donnée.
       - **Par Date Limite :** Offre la possibilité de filtrer les assignments en fonction de leur date limite, avec des conditions flexibles :
         - Si **une date** est spécifiée, les assignments affichés auront une date limite **supérieure** à cette date.
@@ -88,7 +113,7 @@ L'API sera disponible à l'adresse http://localhost:3001.
   ng serve 
   ```
 
-## Comptes de Test
+  ## Comptes de Test
 
 ### Professeur
 - **Adresse-Email** : melanie.leroy@gmail.com
@@ -97,4 +122,3 @@ L'API sera disponible à l'adresse http://localhost:3001.
 ### Élève
 - **Adresse-Email** : henintsoa.corban@gmail.com
 - **Mot de passe** : ABC123abc.
-
