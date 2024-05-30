@@ -55,6 +55,7 @@
 - **Pagination, Filtrage et Affichage de la liste des Assignments avec `<mat-paginator>` pour les professeurs:**
   - Développement de la fonctionnalité pour afficher les devoirs avec pagination.
   - Filtrage : Permet aux élèves de filtrer les assignments de manière efficace selon des critères spécifiques :
+      - **Par description :** Aide à trouver rapidement les assignments à partir de la description en saisissant un mot clé.
       - **Par Matière :** Aide à trouver rapidement les assignments d'une matière donnée.
       - **Par Date Limite :** Offre la possibilité de filtrer les assignments en fonction de leur date limite, avec des conditions flexibles :
         - Si **une date** est spécifiée, les assignments affichés auront une date limite **supérieure** à cette date.
